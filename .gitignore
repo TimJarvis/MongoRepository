@@ -137,6 +137,9 @@ _ReSharper*/
 # TeamCity is a build add-in
 _TeamCity*
 
+# Rider user project config
+.idea
+
 # DotCover is a Code Coverage Tool
 *.dotCover
 
