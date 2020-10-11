@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -89,12 +91,26 @@ namespace MongoRepository
         {
             var derivedCollectionName = typeof(T).Name;
             var def = default(TKey);
+            // if the id is null or equals the default value for that type - then throw.
             if (item.Id == null || (def != null && def.Equals(item.Id)))
             {
                 throw new Exception("You must provide a key to store this document.");
             }
             var collection = _db.GetCollection<T>(collectionName ?? derivedCollectionName);
             await collection.InsertOneAsync(item);
+        }
+        
+        public async Task UpsertAsync<T, TKey>(T item, string collectionName = null) where T : IDocument<TKey> where TKey : IEquatable<TKey>
+        {
+            var derivedCollectionName = typeof(T).Name;
+            var def = default(TKey);
+            // if the id is null or equals the default value for that type - then throw.
+            if (item.Id == null || (def != null && def.Equals(item.Id)))
+            {
+                throw new Exception("You must provide a key to store this document.");
+            }
+            var collection = _db.GetCollection<T>(collectionName ?? derivedCollectionName);
+            await collection.ReplaceOneAsync(filter: f => f.Id.Equals(item.Id) , options: new ReplaceOptions() {IsUpsert = true}, replacement: item);
         }
 
         public async Task AddAsync<T, TKey>(IEnumerable<T> items, string collectionName = null) where T : IDocument<TKey> where TKey : IEquatable<TKey>
@@ -112,6 +128,5 @@ namespace MongoRepository
             var collection = _db.GetCollection<T>(collectionName ?? derivedCollectionName);
             await collection.InsertManyAsync(items);
         }
-        
     }
 }

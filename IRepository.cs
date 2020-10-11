@@ -19,5 +19,6 @@ namespace MongoRepository
         Task<(int total, IList<T> results)> ListWithFilterAsync<T, TKey>(Expression<Func<T,bool>> filter, string collectionName = null) where T : IDocument<TKey> where TKey : IEquatable<TKey>;
         Task AddAsync<T, TKey>(T item, string collectionName = null) where T : IDocument<TKey> where TKey : IEquatable<TKey>;
         Task AddAsync<T, TKey>(IEnumerable<T> items, string collectionName = null) where T : IDocument<TKey> where TKey : IEquatable<TKey>;
+        Task UpsertAsync<T, TKey>(T item, string collectionName = null) where T : IDocument<TKey> where TKey : IEquatable<TKey>;
     }
 }
