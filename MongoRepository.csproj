@@ -6,7 +6,7 @@
     
     <PropertyGroup>
         <PackageId>MongoRepository</PackageId>
-        <Version>1.0.0</Version>
+        <Version>1.1.0</Version>
         <Authors>Tim Jarvis</Authors>
         <Description>MongoRepository</Description>
         <IsPackable>true</IsPackable>
