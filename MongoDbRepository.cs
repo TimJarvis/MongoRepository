@@ -47,6 +47,13 @@ namespace MongoRepository
             var collection = _db.GetCollection<T>(collectionName ?? derivedCollectionName);
             return await collection.AsQueryable().Where(expression).SingleAsync();
         }
+        
+        public async Task<T> SingleOrDefaultAsync<T, TKey>(Expression<Func<T, bool>> expression, string collectionName = null) where T : IDocument<TKey>  where TKey : IEquatable<TKey>
+        {
+            var derivedCollectionName = typeof(T).Name;
+            var collection = _db.GetCollection<T>(collectionName ?? derivedCollectionName);
+            return await collection.AsQueryable().Where(expression).SingleOrDefaultAsync();
+        }
 
         public async Task<(int total, IList<T> results)> ListAsync<T, TKey>(int skip = 0, int take = 50, string collectionName = null) where T : IDocument<TKey>  where TKey : IEquatable<TKey>
         {

@@ -43,10 +43,20 @@ namespace MongoRepository
         {
             return _repository.SingleAsync<T, TKey>(expression);
         }
+        
+        public virtual Task<T> SingleOrDefaultAsync(Expression<Func<T, bool>> expression)
+        {
+            return _repository.SingleOrDefaultAsync<T, TKey>(expression);
+        }
 
         public virtual Task<T> SingleAsync(TKey id)
         {
             return _repository.SingleAsync<T, TKey>(id);
+        }
+        
+        public virtual Task<T> SingleOrDefaultAsync(TKey id)
+        {
+            return _repository.SingleOrDefaultAsync<T, TKey>(id);
         }
 
         /// <summary>
