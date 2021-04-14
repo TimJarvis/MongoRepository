@@ -86,6 +86,14 @@ namespace MongoRepository
             var filter = Builders<T>.Filter.Eq(doc => doc.Id, id);
             return await collection.Find(filter).SingleAsync();
         }
+        
+        public async Task<T> SingleOrDefaultAsync<T, TKey>(TKey id, string collectionName = null) where T : IDocument<TKey>  where TKey : IEquatable<TKey>
+        {
+            var derivedCollectionName = typeof(T).Name;
+            var collection = _db.GetCollection<T>(collectionName ?? derivedCollectionName);
+            var filter = Builders<T>.Filter.Eq(doc => doc.Id, id);
+            return await collection.Find(filter).SingleOrDefaultAsync();
+        }
 
         public async Task AddAsync<T, TKey>(T item, string collectionName = null) where T : IDocument<TKey> where TKey : IEquatable<TKey>
         {
